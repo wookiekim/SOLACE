@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="300" viewBox="0 0 860 300">
+  <rect width="860" height="300" fill="#f0f4ff" rx="12"/>
+  <text x="430" y="140" text-anchor="middle" font-family="Google Sans, sans-serif" font-size="20" fill="#888">
+    [Qualitative Results Figure]
+  </text>
+  <text x="430" y="170" text-anchor="middle" font-family="Google Sans, sans-serif" font-size="14" fill="#aaa">
+    Replace with qualitative.png from the paper (Figure 5)
+  </text>
+</svg>

@@ -1,0 +1,313 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css";
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+@media screen and (min-width: 1024px) {
+  .container.is-max-desktop {
+    max-width: 860px;
+  }
+}
+
+/* Author links */
+.publication-authors a {
+  color: hsl(204, 86%, 53%) !important;
+}
+
+.publication-authors a:hover {
+  text-decoration: underline;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+/* Publication title */
+.publication-title {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* Button styles */
+.pub-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 17px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.pub-btn:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.pub-btn-paper {
+  background: rgba(37, 99, 235, 0.09);
+  color: #1d4ed8;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.pub-btn-arxiv {
+  background: rgba(185, 28, 28, 0.07);
+  color: #b91c1c;
+  border: 1px solid rgba(185, 28, 28, 0.22);
+}
+
+.pub-btn-code {
+  background: rgba(31, 41, 55, 0.06);
+  color: #374151;
+  border: 1px solid rgba(31, 41, 55, 0.18);
+}
+
+/* TL;DR box */
+.tldr {
+  background: linear-gradient(135deg, #60a0ff33, #fd8eff2c);
+  border-radius: 14px;
+  padding: 1.2rem 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.5rem;
+}
+
+/* Abstract panel */
+.abstract-panel {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+}
+
+/* Method overview figure */
+.method-figure {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 0.5rem;
+  background: #fafafa;
+}
+
+.method-figure img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* Results table */
+.results-table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  margin: 1.5rem 0;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.results-table thead th {
+  background: #f0f4ff;
+  padding: 0.7rem 0.6rem;
+  text-align: center;
+  font-weight: 700;
+  border-bottom: 2px solid #d0d8e8;
+  white-space: nowrap;
+}
+
+.results-table tbody td {
+  padding: 0.55rem 0.6rem;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.results-table tbody tr:hover {
+  background: #f8faff;
+}
+
+.results-table .highlight-row {
+  background: #e8f0fe;
+}
+
+.results-table .highlight-row:hover {
+  background: #dce8fc;
+}
+
+.results-table .best-val {
+  font-weight: 700;
+}
+
+.results-table .model-name {
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+  padding-left: 1rem;
+}
+
+.results-table .section-header {
+  background: #f8f8f8;
+  font-weight: 700;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Qualitative results grid */
+.qual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.qual-grid .qual-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.qual-grid .qual-item img {
+  width: 100%;
+  display: block;
+}
+
+.qual-grid .qual-caption {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  color: #555;
+  text-align: center;
+  font-style: italic;
+}
+
+/* BibTeX section */
+.bibtex-container {
+  position: relative;
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.bibtex-container pre {
+  background: transparent;
+  padding: 0;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+#copyButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#copyButton:hover {
+  background-color: #eee;
+}
+
+/* Figure captions */
+.fig-caption {
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+/* Affiliation logos in navbar */
+.affiliation-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.affiliation-logo {
+  height: 1.8rem;
+  max-height: 1.8rem;
+}
+
+/* Key contributions list */
+.contributions-list {
+  list-style: none;
+  padding: 0;
+}
+
+.contributions-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.contributions-list li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: #3273dc;
+  font-weight: 700;
+}
+
+/* Scroll behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Mobile responsiveness */
+@media only screen and (max-width: 768px) {
+  .navbar-menu {
+    display: none !important;
+  }
+
+  .qual-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .abstract-panel {
+    padding: 1rem 1.2rem;
+  }
+
+  .tldr {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .pub-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Teaser section */
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 2rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* Footer */
+.footer {
+  padding: 2rem 1.5rem;
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="280" viewBox="0 0 860 280">
+  <rect width="860" height="280" fill="#f0f4ff" rx="12"/>
+  <text x="430" y="130" text-anchor="middle" font-family="Google Sans, sans-serif" font-size="20" fill="#888">
+    [Method Overview Figure]
+  </text>
+  <text x="430" y="160" text-anchor="middle" font-family="Google Sans, sans-serif" font-size="14" fill="#aaa">
+    Replace with method.png from the paper (Figure 2)
+  </text>
+</svg>

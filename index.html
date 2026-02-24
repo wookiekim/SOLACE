@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARC: Adaptive Rewarding by Self-Confidence</title>
+  <meta name="description"
+    content="ARC: Improving Text-to-Image Generation with Intrinsic Self-Confidence Rewards">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <script src="static/js/copy2clipboard.js"></script>
+
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+    <div class="container is-max-desktop">
+      <div class="navbar-brand">
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+          data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start affiliation-container">
+          <a class="navbar-item" href="https://postech.ac.kr" target="_blank">
+            <img src="static/images/postech_logo.svg" alt="POSTECH" class="affiliation-logo">
+          </a>
+          <a class="navbar-item" href="https://rlwrld.com" target="_blank">
+            <img src="static/images/rlwrld_logo.svg" alt="RLWRLD" class="affiliation-logo">
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Title and authors -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-2 is-size-3-mobile publication-title">
+              Improving Text-to-Image Generation with Intrinsic Self-Confidence Rewards
+            </h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="#">Seungwook Kim</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#">Minsu Cho</a><sup>1,2</sup>
+              </span>
+            </div>
+
+            <div class="is-size-6 publication-authors" style="margin-top: 0.5rem;">
+              <span class="author-block"><sup>1</sup> POSTECH&nbsp;&nbsp;</span>
+              <span class="author-block"><sup>2</sup> RLWRLD</span>
+            </div>
+
+            <!-- Venue -->
+            <div class="has-text-centered" style="margin: 18px 0 6px;">
+              <span
+                style="color: #1565c0; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.05em;">
+                CVPR 2026 Submission
+              </span>
+            </div>
+
+            <!-- Links -->
+            <div class="has-text-centered" style="margin-top: 10px;">
+              <div style="display:flex; gap:9px; justify-content:center; flex-wrap:wrap;">
+                <a href="#" class="pub-btn pub-btn-paper">
+                  <i class="fas fa-file-pdf"></i> Paper
+                </a>
+                <a href="#" class="pub-btn pub-btn-arxiv">
+                  <i class="ai ai-arxiv"></i> arXiv
+                </a>
+                <a href="#" class="pub-btn pub-btn-code">
+                  <i class="fab fa-github"></i> Code
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TL;DR -->
+  <section class="hero teaser" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <p class="tldr has-text-centered">
+            <b>TL;DR</b> &mdash; We introduce <b>ARC</b> (Adaptive Rewarding by Self-Confidence), a
+            post-training framework for text-to-image generators that uses the model's own
+            <b>intrinsic self-confidence</b> as a reward signal &mdash; no external reward models, annotators,
+            or additional datasets needed. ARC delivers consistent gains in <b>compositionality</b>,
+            <b>text rendering</b>, and <b>text-image alignment</b>, and complements external rewards to
+            <b>mitigate reward hacking</b>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser figure -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <div class="method-figure">
+        <img src="static/images/teaser.svg"
+          alt="ARC teaser: qualitative comparison showing SD3.5 vs SD3.5 + ARC">
+      </div>
+      <p class="fig-caption has-text-centered">
+        <b>Figure 1.</b> Qualitative examples of ARC applied to SD3.5-Medium on the Pick-a-Pic
+        dataset. ARC post-training consistently improves image quality, compositionality, and text rendering
+        without any external reward model.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- Abstract -->
+  <section class="section" id="Abstract" style="padding-top: 1rem;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Abstract</h2>
+      <div class="abstract-panel">
+        <div class="content has-text-justified">
+          <p>
+            Text-to-image generation powers content creation across design, media, and data augmentation.
+            Post-training of text-to-image generative models is a promising path to better match human
+            preferences, factuality, and improved aesthetics. We introduce <b>ARC (Adaptive Rewarding by
+            Self-Confidence)</b>, a post-training framework that replaces external reward supervision with an
+            internal self-confidence signal, obtained by evaluating how accurately the model recovers injected
+            noise under self-denoising probes. ARC converts this intrinsic signal into scalar rewards, enabling
+            fully unsupervised optimization without additional datasets, annotators, or reward models.
+            Empirically, by reinforcing high-confidence generations, ARC delivers consistent gains in
+            compositional generation, text rendering and text-image alignment over the baseline.
+            We also find that integrating ARC with external rewards results in a complementary improvement,
+            with alleviated reward hacking.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Contributions -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Key Contributions</h2>
+      <div class="content">
+        <ul class="contributions-list">
+          <li>
+            We present <b>ARC</b>, a post-training framework that uses self-confidence as a reward for
+            text-to-image generators, requiring <b>no external reward models</b>, annotators, or datasets.
+          </li>
+          <li>
+            We define the self-confidence reward by <b>re-noising the model's own outputs</b> and
+            rewarding accurate recovery of the injected noise &mdash; a principled, training-aligned signal.
+          </li>
+          <li>
+            Across standard benchmarks and a comprehensive user study, ARC yields <b>consistent gains</b>
+            in compositionality, text rendering, and text-image alignment.
+          </li>
+          <li>
+            ARC <b>complements external-reward pipelines</b>: applying ARC on top of externally
+            post-trained models improves non-target capabilities while mitigating reward hacking.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method Overview -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Method Overview</h2>
+      <div class="content has-text-justified">
+        <p>
+          Given a text prompt \(c\), we generate \(G\) different latents using the flow-matching model.
+          Without decoding, we <b>re-noise</b> the latents using \(K\) noise probes across timesteps
+          \(t \in \mathcal{T} \subset [0,1]\). For each generated latent \(z_0^{(i)}\), we formulate the model's
+          <b>self-confidence</b> as its ability to accurately denoise the re-noised latent. This self-confidence
+          serves as an intrinsic reward scalar, which we use to post-train the model via
+          <a href="https://arxiv.org/abs/2505.05470" target="_blank">Flow-GRPO</a>.
+        </p>
+      </div>
+      <div class="method-figure">
+        <img src="static/images/method.svg" alt="ARC method overview">
+      </div>
+      <p class="fig-caption has-text-centered">
+        <b>Figure 2.</b> Overview of ARC. Given a text prompt, we generate G latents, re-noise them with K
+        shared noise probes, and measure the model's ability to recover the injected noise. This
+        self-confidence score is used as the intrinsic reward for GRPO post-training.
+      </p>
+
+      <div class="content has-text-justified" style="margin-top: 1.5rem;">
+        <p>
+          The <b>self-confidence reward</b> is computed as:
+        </p>
+      </div>
+      <div class="has-text-centered" style="margin: 1rem 0;">
+        <p>
+          \[
+          R_{\text{ARC}}(z_0^{(i)}, c) = \frac{1}{\sum_{t \in \mathcal{T}} w(t)}
+          \sum_{t \in \mathcal{T}} w(t) \cdot S_{i,t}
+          \]
+        </p>
+        <p>where</p>
+        <p>
+          \[
+          S_{i,t} = -\log\left(\text{MSE}_{i,t} + \delta\right),
+          \quad
+          \text{MSE}_{i,t} = \frac{1}{K}\sum_{m=1}^{K}
+          \left\| \hat{\epsilon}_\theta(z_t^{(i,m)}, t, c) - \epsilon^{(m)} \right\|^2
+          \]
+        </p>
+      </div>
+      <div class="content has-text-justified">
+        <p>
+          The negative log transform amplifies small errors into large rewards while stabilizing the
+          dynamic range. The reward is computed entirely in <b>latent space</b>, avoiding the need for
+          decoding and keeping the signal model-native.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stabilization Techniques -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Key Design Choices</h2>
+      <div class="content has-text-justified">
+        <ul>
+          <li>
+            <b>Training on selective timesteps:</b> We optimize only a suffix of the training schedule
+            (\(|\mathcal{T}_{\text{train}}| = \lceil \rho |\mathcal{T}| \rceil\) with \(\rho = 0.6\))
+            to prevent collapse from reward hacking on early timesteps.
+          </li>
+          <li>
+            <b>Self-confidence without CFG:</b> Although images are sampled with classifier-free guidance,
+            self-confidence is computed <i>without</i> CFG to evaluate the base conditional policy rather than
+            a guided proxy.
+          </li>
+          <li>
+            <b>Online self-confidence:</b> Using the model being trained (\(\pi_\theta\)) for self-confidence
+            computation, rather than a fixed reference model, yields stronger improvements as the model's
+            confidence becomes more reliable through training.
+          </li>
+          <li>
+            <b>Antithetic noise pairing:</b> We enforce exact mean zero within each noise probe set
+            (\(\epsilon^{(m+K/2)} = -\epsilon^{(m)}\)) for variance reduction.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quantitative Results -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Quantitative Results</h2>
+      <div class="content has-text-justified">
+        <p>
+          We evaluate ARC on compositional generation (GenEval), visual text rendering (OCR),
+          image quality (CLIP-Score, Aesthetic Score), and human preference alignment (PickScore,
+          HPSv2, ImageReward, UnifiedReward).
+        </p>
+      </div>
+      <div class="results-table-container">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th rowspan="2" style="text-align:left; padding-left:1rem;">Model</th>
+              <th colspan="2">Task-specific</th>
+              <th colspan="2">Image Quality</th>
+              <th colspan="4">Human Preference</th>
+            </tr>
+            <tr>
+              <th>GenEval</th>
+              <th>OCR</th>
+              <th>CLIP</th>
+              <th>Aesth.</th>
+              <th>Pick</th>
+              <th>HPSv2</th>
+              <th>ImgRwd</th>
+              <th>UniRwd</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="model-name">SD-XL</td>
+              <td>0.55</td>
+              <td>0.14</td>
+              <td>0.287</td>
+              <td>5.60</td>
+              <td>22.42</td>
+              <td>0.280</td>
+              <td>0.76</td>
+              <td>2.93</td>
+            </tr>
+            <tr>
+              <td class="model-name">SD3.5-L</td>
+              <td>0.71</td>
+              <td>0.68</td>
+              <td>0.289</td>
+              <td>5.50</td>
+              <td>22.91</td>
+              <td>0.288</td>
+              <td>0.96</td>
+              <td>3.25</td>
+            </tr>
+            <tr style="border-top: 2px solid #ccc;">
+              <td class="model-name">SD3.5-M (2.5B)</td>
+              <td>0.65</td>
+              <td>0.61</td>
+              <td>0.282</td>
+              <td>5.36</td>
+              <td>22.34</td>
+              <td>0.279</td>
+              <td>0.84</td>
+              <td>3.08</td>
+            </tr>
+            <tr class="highlight-row">
+              <td class="model-name">+ ARC (Ours)</td>
+              <td class="best-val">0.71</td>
+              <td class="best-val">0.67</td>
+              <td class="best-val">0.288</td>
+              <td class="best-val">5.39</td>
+              <td>22.41</td>
+              <td>0.278</td>
+              <td>0.87</td>
+              <td>3.11</td>
+            </tr>
+            <tr style="border-top: 2px solid #ccc;">
+              <td class="model-name">SD3.5-M + FlowGRPO</td>
+              <td>0.67</td>
+              <td>0.68</td>
+              <td>0.278</td>
+              <td>5.90</td>
+              <td class="best-val">23.50</td>
+              <td class="best-val">0.314</td>
+              <td class="best-val">1.26</td>
+              <td class="best-val">3.37</td>
+            </tr>
+            <tr class="highlight-row">
+              <td class="model-name">+ FlowGRPO + ARC (Ours)</td>
+              <td class="best-val">0.77</td>
+              <td class="best-val">0.70</td>
+              <td class="best-val">0.287</td>
+              <td>5.63</td>
+              <td>22.73</td>
+              <td>0.286</td>
+              <td>1.07</td>
+              <td>3.26</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fig-caption has-text-centered">
+        <b>Table 1.</b> Quantitative results of ARC post-training. ARC yields consistent gains across
+        task-specific, image quality, and human preference metrics. Applying ARC on top of FlowGRPO
+        further improves compositionality and text rendering while mitigating reward hacking.
+      </p>
+    </div>
+  </section>
+
+  <!-- User Study -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">User Study</h2>
+      <div class="content has-text-justified">
+        <p>
+          We conducted a comprehensive user study with ~1,800 responses from 20 participants on
+          prompts from PartiPrompts and HPSv2, evaluating visual realism/appeal and text-image alignment.
+        </p>
+      </div>
+      <div class="method-figure">
+        <img src="static/images/user_study.svg" alt="User study results">
+      </div>
+      <p class="fig-caption has-text-centered">
+        <b>Figure 3.</b> User study results. ARC post-training consistently outperforms the baseline SD3.5-M
+        in both visual realism/appeal and text-image alignment across PartiPrompts and HPSv2 prompt sets.
+      </p>
+    </div>
+  </section>
+
+  <!-- Qualitative Results -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Qualitative Results</h2>
+      <div class="content has-text-justified">
+        <p>
+          ARC improves compositionality (correct object counts, spatial relations, attribute binding),
+          text rendering accuracy, and overall visual quality without any external reward supervision.
+        </p>
+      </div>
+      <div class="method-figure">
+        <img src="static/images/qualitative.svg" alt="Qualitative comparison">
+      </div>
+      <p class="fig-caption has-text-centered">
+        <b>Figure 4.</b> Qualitative results of ARC on DrawBench, GenEval, and OCR benchmarks.
+        ARC shows consistent improvements over the baseline SD3.5 in compositionality, text rendering,
+        and visual appeal.
+      </p>
+
+      <div class="method-figure" style="margin-top: 2rem;">
+        <img src="static/images/complementary.svg"
+          alt="ARC complements external rewards">
+      </div>
+      <p class="fig-caption has-text-centered">
+        <b>Figure 5.</b> Effect of applying ARC after FlowGRPO post-training with PickScore as the
+        external reward. ARC complements external rewards, recovering compositionality lost during
+        reward-targeted optimization while maintaining visual appeal.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- Ablation Studies -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Ablation Studies</h2>
+      <div class="content has-text-justified">
+        <p>
+          We validate the key design choices of ARC through ablation studies on the number of noise
+          probes, CFG usage during self-confidence computation, and online vs. offline self-confidence.
+        </p>
+      </div>
+      <div class="results-table-container">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding-left:1rem;">Configuration</th>
+              <th>GenEval</th>
+              <th>OCR</th>
+              <th>CLIP</th>
+              <th>Aesth.</th>
+              <th>Pick</th>
+              <th>HPSv2</th>
+              <th>ImgRwd</th>
+              <th>UniRwd</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="9" class="section-header">Number of Noise Probes K</td>
+            </tr>
+            <tr>
+              <td class="model-name">K = 4</td>
+              <td>0.66</td>
+              <td>0.67</td>
+              <td>0.287</td>
+              <td>5.37</td>
+              <td>22.34</td>
+              <td>0.273</td>
+              <td>0.81</td>
+              <td>3.08</td>
+            </tr>
+            <tr class="highlight-row">
+              <td class="model-name">K = 8 (Ours)</td>
+              <td class="best-val">0.71</td>
+              <td class="best-val">0.67</td>
+              <td class="best-val">0.288</td>
+              <td>5.39</td>
+              <td class="best-val">22.41</td>
+              <td class="best-val">0.278</td>
+              <td class="best-val">0.87</td>
+              <td class="best-val">3.11</td>
+            </tr>
+            <tr>
+              <td class="model-name">K = 16</td>
+              <td>0.67</td>
+              <td>0.67</td>
+              <td>0.288</td>
+              <td class="best-val">5.42</td>
+              <td>22.34</td>
+              <td>0.278</td>
+              <td>0.86</td>
+              <td>3.09</td>
+            </tr>
+            <tr>
+              <td colspan="9" class="section-header">CFG for Self-Confidence</td>
+            </tr>
+            <tr>
+              <td class="model-name">With CFG</td>
+              <td>0.68</td>
+              <td>0.59</td>
+              <td>0.287</td>
+              <td>5.38</td>
+              <td>22.39</td>
+              <td>0.278</td>
+              <td>0.85</td>
+              <td>3.10</td>
+            </tr>
+            <tr class="highlight-row">
+              <td class="model-name">Without CFG (Ours)</td>
+              <td class="best-val">0.71</td>
+              <td class="best-val">0.67</td>
+              <td class="best-val">0.288</td>
+              <td class="best-val">5.39</td>
+              <td class="best-val">22.41</td>
+              <td class="best-val">0.278</td>
+              <td class="best-val">0.87</td>
+              <td class="best-val">3.11</td>
+            </tr>
+            <tr>
+              <td colspan="9" class="section-header">Online vs Offline Self-Confidence</td>
+            </tr>
+            <tr>
+              <td class="model-name">Offline</td>
+              <td>0.69</td>
+              <td>0.61</td>
+              <td>0.285</td>
+              <td>5.36</td>
+              <td>22.36</td>
+              <td>0.274</td>
+              <td>0.82</td>
+              <td>3.07</td>
+            </tr>
+            <tr class="highlight-row">
+              <td class="model-name">Online (Ours)</td>
+              <td class="best-val">0.71</td>
+              <td class="best-val">0.67</td>
+              <td class="best-val">0.288</td>
+              <td class="best-val">5.39</td>
+              <td class="best-val">22.41</td>
+              <td class="best-val">0.278</td>
+              <td class="best-val">0.87</td>
+              <td class="best-val">3.11</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fig-caption has-text-centered">
+        <b>Table 2.</b> Ablation study results validating the design choices of ARC.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- BibTeX -->
+  <section class="section" style="padding-top: 0;" id="BibTeX">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4" id="bibtexTitle">BibTeX</h2>
+      <div class="bibtex-container">
+        <button id="copyButton" onclick="copyBibtex()">Copy</button>
+        <pre id="bibtexContent">@article{kim2025arc,
+  title={Improving Text-to-Image Generation with Intrinsic Self-Confidence Rewards},
+  author={Kim, Seungwook and Cho, Minsu},
+  journal={arXiv preprint},
+  year={2025}
+}</pre>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>
+          This website template is inspired by
+          <a href="https://baegwangbin.github.io/DSINE/" target="_blank">DSINE</a> and
+          <a href="https://cvlab-kaist.github.io/RobustVGGT/" target="_blank">Robust VGGT</a>.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Navbar burger toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const $navbarBurgers = Array.prototype.slice.call(
+        document.querySelectorAll('.navbar-burger'), 0);
+      if ($navbarBurgers.length > 0) {
+        $navbarBurgers.forEach(el => {
+          el.addEventListener('click', () => {
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+          });
+        });
+      }
+    });
+  </script>
+
+</body>
+
+</html>
