@@ -76,20 +76,20 @@
             <div class="has-text-centered" style="margin: 18px 0 6px;">
               <span
                 style="color: #1565c0; font-weight: 700; font-size: 1.2rem; letter-spacing: 0.05em;">
-                CVPR 2026 Submission
+                CVPR 2026
               </span>
             </div>
 
             <!-- Links -->
             <div class="has-text-centered" style="margin-top: 10px;">
               <div style="display:flex; gap:9px; justify-content:center; flex-wrap:wrap;">
-                <a href="#" class="pub-btn pub-btn-paper">
-                  <i class="fas fa-file-pdf"></i> Paper
-                </a>
-                <a href="#" class="pub-btn pub-btn-arxiv">
-                  <i class="ai ai-arxiv"></i> arXiv
-                </a>
-                <a href="#" class="pub-btn pub-btn-code">
+                <span class="pub-btn pub-btn-paper" style="opacity: 0.5; cursor: default;">
+                  <i class="fas fa-file-pdf"></i> Paper (coming soon)
+                </span>
+                <span class="pub-btn pub-btn-arxiv" style="opacity: 0.5; cursor: default;">
+                  <i class="ai ai-arxiv"></i> arXiv (coming soon)
+                </span>
+                <a href="https://github.com/wookiekim/ARC" class="pub-btn pub-btn-code" target="_blank">
                   <i class="fab fa-github"></i> Code
                 </a>
               </div>
@@ -107,12 +107,10 @@
       <div class="columns is-centered">
         <div class="column is-full-width">
           <p class="tldr has-text-centered">
-            <b>TL;DR</b> &mdash; We introduce <b>ARC</b> (Adaptive Rewarding by Self-Confidence), a
-            post-training framework for text-to-image generators that uses the model's own
-            <b>intrinsic self-confidence</b> as a reward signal &mdash; no external reward models, annotators,
-            or additional datasets needed. ARC delivers consistent gains in <b>compositionality</b>,
-            <b>text rendering</b>, and <b>text-image alignment</b>, and complements external rewards to
-            <b>mitigate reward hacking</b>.
+            <b>TL;DR</b> &mdash; <b>ARC</b> post-trains text-to-image generators using the model's own
+            <b>self-confidence</b> as a reward &mdash; no external reward models needed. It improves
+            compositionality, text rendering, and text-image alignment, and complements external rewards
+            to mitigate reward hacking.
           </p>
         </div>
       </div>
@@ -123,8 +121,7 @@
   <section class="section" style="padding-top: 0;">
     <div class="container is-max-desktop">
       <div class="method-figure">
-        <img src="static/images/teaser.svg"
-          alt="ARC teaser: qualitative comparison showing SD3.5 vs SD3.5 + ARC">
+        <img src="static/images/teaser.png" alt="ARC teaser: qualitative comparison showing SD3.5 vs SD3.5 + ARC">
       </div>
       <p class="fig-caption has-text-centered">
         <b>Figure 1.</b> Qualitative examples of ARC applied to SD3.5-Medium on the Pick-a-Pic
@@ -201,7 +198,7 @@
         </p>
       </div>
       <div class="method-figure">
-        <img src="static/images/method.svg" alt="ARC method overview">
+        <img src="static/images/method.png" alt="ARC method overview">
       </div>
       <p class="fig-caption has-text-centered">
         <b>Figure 2.</b> Overview of ARC. Given a text prompt, we generate G latents, re-noise them with K
@@ -391,7 +388,7 @@
         </p>
       </div>
       <div class="method-figure">
-        <img src="static/images/user_study.svg" alt="User study results">
+        <img src="static/images/user_study.png" alt="User study results">
       </div>
       <p class="fig-caption has-text-centered">
         <b>Figure 3.</b> User study results. ARC post-training consistently outperforms the baseline SD3.5-M
@@ -411,7 +408,7 @@
         </p>
       </div>
       <div class="method-figure">
-        <img src="static/images/qualitative.svg" alt="Qualitative comparison">
+        <img src="static/images/qualitative.png" alt="Qualitative comparison">
       </div>
       <p class="fig-caption has-text-centered">
         <b>Figure 4.</b> Qualitative results of ARC on DrawBench, GenEval, and OCR benchmarks.
@@ -420,8 +417,7 @@
       </p>
 
       <div class="method-figure" style="margin-top: 2rem;">
-        <img src="static/images/complementary.svg"
-          alt="ARC complements external rewards">
+        <img src="static/images/complementary.png" alt="ARC complements external rewards">
       </div>
       <p class="fig-caption has-text-centered">
         <b>Figure 5.</b> Effect of applying ARC after FlowGRPO post-training with PickScore as the
@@ -560,11 +556,11 @@
       <h2 class="title is-4" id="bibtexTitle">BibTeX</h2>
       <div class="bibtex-container">
         <button id="copyButton" onclick="copyBibtex()">Copy</button>
-        <pre id="bibtexContent">@article{kim2025arc,
+        <pre id="bibtexContent">@inproceedings{kim2025arc,
   title={Improving Text-to-Image Generation with Intrinsic Self-Confidence Rewards},
   author={Kim, Seungwook and Cho, Minsu},
-  journal={arXiv preprint},
-  year={2025}
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2026}
 }</pre>
       </div>
     </div>
