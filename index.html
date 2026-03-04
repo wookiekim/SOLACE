@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SPARC: Self-Probing Adaptive Reward by Confidence</title>
+  <title>SOLACE: Self-Originating LAtent Confidence Estimation</title>
   <meta name="description"
-    content="SPARC: Improving Text-to-Image Generation with Intrinsic Self-Confidence Rewards">
+    content="SOLACE: Improving Text-to-Image Generation with Intrinsic Self-Confidence Rewards">
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="static/css/style.css">
@@ -89,7 +89,7 @@
                 <span class="pub-btn pub-btn-arxiv" style="opacity: 0.5; cursor: default;">
                   <i class="ai ai-arxiv"></i> arXiv (coming soon)
                 </span>
-                <a href="https://github.com/wookiekim/SPARC" class="pub-btn pub-btn-code" target="_blank">
+                <a href="https://github.com/wookiekim/SOLACE" class="pub-btn pub-btn-code" target="_blank">
                   <i class="fab fa-github"></i> Code
                 </a>
               </div>
@@ -107,7 +107,7 @@
       <div class="columns is-centered">
         <div class="column is-full-width">
           <p class="tldr has-text-centered">
-            <b>TL;DR</b> &mdash; <b>SPARC</b> post-trains text-to-image generators using the model's own
+            <b>TL;DR</b> &mdash; <b>SOLACE</b> post-trains text-to-image generators using the model's own
             <b>self-confidence</b> as a reward &mdash; no external reward models needed. It improves
             compositionality, text rendering, and text-image alignment, and complements external rewards
             to mitigate reward hacking.
@@ -121,11 +121,11 @@
   <section class="section" style="padding-top: 0;">
     <div class="container is-max-desktop">
       <div class="method-figure">
-        <img src="static/images/teaser.png" alt="SPARC teaser: qualitative comparison showing SD3.5 vs SD3.5 + SPARC">
+        <img src="static/images/teaser.png" alt="SOLACE teaser: qualitative comparison showing SD3.5 vs SD3.5 + SOLACE">
       </div>
       <p class="fig-caption has-text-centered">
-        <b>Figure 1.</b> Qualitative examples of SPARC applied to SD3.5-Medium on the Pick-a-Pic
-        dataset. SPARC post-training consistently improves image quality, compositionality, and text rendering
+        <b>Figure 1.</b> Qualitative examples of SOLACE applied to SD3.5-Medium on the Pick-a-Pic
+        dataset. SOLACE post-training consistently improves image quality, compositionality, and text rendering
         without any external reward model.
       </p>
     </div>
@@ -141,14 +141,14 @@
           <p>
             Text-to-image generation powers content creation across design, media, and data augmentation.
             Post-training of text-to-image generative models is a promising path to better match human
-            preferences, factuality, and improved aesthetics. We introduce <b>SPARC (Self-Probing Adaptive
-            Reward by Confidence)</b>, a post-training framework that replaces external reward supervision with an
+            preferences, factuality, and improved aesthetics. We introduce <b>SOLACE (Self-Originating LAtent
+            Confidence Estimation)</b>, a post-training framework that replaces external reward supervision with an
             internal self-confidence signal, obtained by evaluating how accurately the model recovers injected
-            noise under self-denoising probes. SPARC converts this intrinsic signal into scalar rewards, enabling
+            noise under self-denoising probes. SOLACE converts this intrinsic signal into scalar rewards, enabling
             fully unsupervised optimization without additional datasets, annotators, or reward models.
-            Empirically, by reinforcing high-confidence generations, SPARC delivers consistent gains in
+            Empirically, by reinforcing high-confidence generations, SOLACE delivers consistent gains in
             compositional generation, text rendering and text-image alignment over the baseline.
-            We also find that integrating SPARC with external rewards results in a complementary improvement,
+            We also find that integrating SOLACE with external rewards results in a complementary improvement,
             with alleviated reward hacking.
           </p>
         </div>
@@ -163,7 +163,7 @@
       <div class="content">
         <ul class="contributions-list">
           <li>
-            We present <b>SPARC</b>, a post-training framework that uses self-confidence as a reward for
+            We present <b>SOLACE</b>, a post-training framework that uses self-confidence as a reward for
             text-to-image generators, requiring <b>no external reward models</b>, annotators, or datasets.
           </li>
           <li>
@@ -171,11 +171,11 @@
             rewarding accurate recovery of the injected noise &mdash; a principled, training-aligned signal.
           </li>
           <li>
-            Across standard benchmarks and a comprehensive user study, SPARC yields <b>consistent gains</b>
+            Across standard benchmarks and a comprehensive user study, SOLACE yields <b>consistent gains</b>
             in compositionality, text rendering, and text-image alignment.
           </li>
           <li>
-            SPARC <b>complements external-reward pipelines</b>: applying SPARC on top of externally
+            SOLACE <b>complements external-reward pipelines</b>: applying SOLACE on top of externally
             post-trained models improves non-target capabilities while mitigating reward hacking.
           </li>
         </ul>
@@ -198,10 +198,10 @@
         </p>
       </div>
       <div class="method-figure">
-        <img src="static/images/method.png" alt="SPARC method overview">
+        <img src="static/images/method.png" alt="SOLACE method overview">
       </div>
       <p class="fig-caption has-text-centered">
-        <b>Figure 2.</b> Overview of SPARC. Given a text prompt, we generate G latents, re-noise them with K
+        <b>Figure 2.</b> Overview of SOLACE. Given a text prompt, we generate G latents, re-noise them with K
         shared noise probes, and measure the model's ability to recover the injected noise. This
         self-confidence score is used as the intrinsic reward for GRPO post-training.
       </p>
@@ -214,7 +214,7 @@
       <div class="has-text-centered" style="margin: 1rem 0;">
         <p>
           \[
-          R_{\text{SPARC}}(z_0^{(i)}, c) = \frac{1}{\sum_{t \in \mathcal{T}} w(t)}
+          R_{\text{SOLACE}}(z_0^{(i)}, c) = \frac{1}{\sum_{t \in \mathcal{T}} w(t)}
           \sum_{t \in \mathcal{T}} w(t) \cdot S_{i,t}
           \]
         </p>
@@ -274,7 +274,7 @@
       <h2 class="title is-4">Quantitative Results</h2>
       <div class="content has-text-justified">
         <p>
-          We evaluate SPARC on compositional generation (GenEval), visual text rendering (OCR),
+          We evaluate SOLACE on compositional generation (GenEval), visual text rendering (OCR),
           image quality (CLIP-Score, Aesthetic Score), and human preference alignment (PickScore,
           HPSv2, ImageReward, UnifiedReward).
         </p>
@@ -334,7 +334,7 @@
               <td>3.08</td>
             </tr>
             <tr class="highlight-row">
-              <td class="model-name">+ SPARC (Ours)</td>
+              <td class="model-name">+ SOLACE (Ours)</td>
               <td class="best-val">0.71</td>
               <td class="best-val">0.67</td>
               <td class="best-val">0.288</td>
@@ -356,7 +356,7 @@
               <td class="best-val">3.37</td>
             </tr>
             <tr class="highlight-row">
-              <td class="model-name">+ FlowGRPO + SPARC (Ours)</td>
+              <td class="model-name">+ FlowGRPO + SOLACE (Ours)</td>
               <td class="best-val">0.77</td>
               <td class="best-val">0.70</td>
               <td class="best-val">0.287</td>
@@ -370,8 +370,8 @@
         </table>
       </div>
       <p class="fig-caption has-text-centered">
-        <b>Table 1.</b> Quantitative results of SPARC post-training. SPARC yields consistent gains across
-        task-specific, image quality, and human preference metrics. Applying SPARC on top of FlowGRPO
+        <b>Table 1.</b> Quantitative results of SOLACE post-training. SOLACE yields consistent gains across
+        task-specific, image quality, and human preference metrics. Applying SOLACE on top of FlowGRPO
         further improves compositionality and text rendering while mitigating reward hacking.
       </p>
     </div>
@@ -391,7 +391,7 @@
         <img src="static/images/user_study.png" alt="User study results">
       </div>
       <p class="fig-caption has-text-centered">
-        <b>Figure 3.</b> User study results. SPARC post-training consistently outperforms the baseline SD3.5-M
+        <b>Figure 3.</b> User study results. SOLACE post-training consistently outperforms the baseline SD3.5-M
         in both visual realism/appeal and text-image alignment across PartiPrompts and HPSv2 prompt sets.
       </p>
     </div>
@@ -403,7 +403,7 @@
       <h2 class="title is-4">Qualitative Results</h2>
       <div class="content has-text-justified">
         <p>
-          SPARC improves compositionality (correct object counts, spatial relations, attribute binding),
+          SOLACE improves compositionality (correct object counts, spatial relations, attribute binding),
           text rendering accuracy, and overall visual quality without any external reward supervision.
         </p>
       </div>
@@ -411,17 +411,17 @@
         <img src="static/images/qualitative.png" alt="Qualitative comparison">
       </div>
       <p class="fig-caption has-text-centered">
-        <b>Figure 4.</b> Qualitative results of SPARC on DrawBench, GenEval, and OCR benchmarks.
-        SPARC shows consistent improvements over the baseline SD3.5 in compositionality, text rendering,
+        <b>Figure 4.</b> Qualitative results of SOLACE on DrawBench, GenEval, and OCR benchmarks.
+        SOLACE shows consistent improvements over the baseline SD3.5 in compositionality, text rendering,
         and visual appeal.
       </p>
 
       <div class="method-figure" style="margin-top: 2rem;">
-        <img src="static/images/complementary.png" alt="SPARC complements external rewards">
+        <img src="static/images/complementary.png" alt="SOLACE complements external rewards">
       </div>
       <p class="fig-caption has-text-centered">
-        <b>Figure 5.</b> Effect of applying SPARC after FlowGRPO post-training with PickScore as the
-        external reward. SPARC complements external rewards, recovering compositionality lost during
+        <b>Figure 5.</b> Effect of applying SOLACE after FlowGRPO post-training with PickScore as the
+        external reward. SOLACE complements external rewards, recovering compositionality lost during
         reward-targeted optimization while maintaining visual appeal.
       </p>
     </div>
@@ -434,7 +434,7 @@
       <h2 class="title is-4">Ablation Studies</h2>
       <div class="content has-text-justified">
         <p>
-          We validate the key design choices of SPARC through ablation studies on the number of noise
+          We validate the key design choices of SOLACE through ablation studies on the number of noise
           probes, CFG usage during self-confidence computation, and online vs. offline self-confidence.
         </p>
       </div>
@@ -544,7 +544,7 @@
         </table>
       </div>
       <p class="fig-caption has-text-centered">
-        <b>Table 2.</b> Ablation study results validating the design choices of SPARC.
+        <b>Table 2.</b> Ablation study results validating the design choices of SOLACE.
       </p>
     </div>
   </section>
@@ -556,7 +556,7 @@
       <h2 class="title is-4" id="bibtexTitle">BibTeX</h2>
       <div class="bibtex-container">
         <button id="copyButton" onclick="copyBibtex()">Copy</button>
-        <pre id="bibtexContent">@inproceedings{kim2026sparc,
+        <pre id="bibtexContent">@inproceedings{kim2026solace,
   title={Improving Text-to-Image Generation with Intrinsic Self-Confidence Rewards},
   author={Kim, Seungwook and Cho, Minsu},
   booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
