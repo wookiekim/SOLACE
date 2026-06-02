@@ -37,6 +37,43 @@ pip install -e .
 pip install flash-attn --no-build-isolation
 ```
 
+## Pretrained Weights
+
+We release the SOLACE LoRA adapters on the [HuggingFace Hub](https://huggingface.co/wookiekim). Each is a PEFT LoRA adapter for the SD3 transformer — load it on top of the corresponding base model.
+
+| Model | Base | Description | Weights |
+|-------|------|-------------|---------|
+| SOLACE (SD3.5-M) | SD3.5-Medium | Self-confidence reward only | [`wookiekim/SD3.5M-SOLACE`](https://huggingface.co/wookiekim/SD3.5M-SOLACE) |
+| SOLACE (SD3.5-L) | SD3.5-Large | Self-confidence reward only | [`wookiekim/SD3.5L-SOLACE`](https://huggingface.co/wookiekim/SD3.5L-SOLACE) |
+| SOLACE on FlowGRPO-GenEval | SD3.5-Medium | Flow-GRPO post-trained on GenEval, then SOLACE | [`wookiekim/SD3.5M-SOLACE-on-FlowGRPO-GenEval`](https://huggingface.co/wookiekim/SD3.5M-SOLACE-on-FlowGRPO-GenEval) |
+| SOLACE on FlowGRPO-OCR | SD3.5-Medium | Flow-GRPO post-trained on OCR, then SOLACE | [`wookiekim/SD3.5M-SOLACE-on-FlowGRPO-OCR`](https://huggingface.co/wookiekim/SD3.5M-SOLACE-on-FlowGRPO-OCR) |
+| SOLACE on FlowGRPO-PickScore | SD3.5-Medium | Flow-GRPO post-trained on PickScore, then SOLACE | [`wookiekim/SD3.5M-SOLACE-on-FlowGRPO-PickScore`](https://huggingface.co/wookiekim/SD3.5M-SOLACE-on-FlowGRPO-PickScore) |
+
+### Inference
+
+```python
+import torch
+from diffusers import StableDiffusion3Pipeline
+from peft import PeftModel
+
+model_id = "stabilityai/stable-diffusion-3.5-medium"  # or -large for SD3.5L
+lora_ckpt_path = "wookiekim/SD3.5M-SOLACE-on-FlowGRPO-GenEval"
+device = "cuda"
+
+pipe = StableDiffusion3Pipeline.from_pretrained(model_id, torch_dtype=torch.float16)
+pipe.transformer = PeftModel.from_pretrained(pipe.transformer, lora_ckpt_path)
+pipe.transformer = pipe.transformer.merge_and_unload()
+pipe = pipe.to(device)
+
+image = pipe(
+    "a photo of a black kite and a green bear",
+    height=512, width=512, num_inference_steps=40, guidance_scale=4.5,
+).images[0]
+image.save("solace.png")
+```
+
+To continue training from a released adapter, point `config.train.lora_path` at the HuggingFace repo id (or a local download).
+
 ## Training
 
 ### SD3.5-Medium (8 GPUs)
