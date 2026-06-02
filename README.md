@@ -45,6 +45,8 @@ We release the SOLACE LoRA adapters on the [HuggingFace Hub](https://huggingface
 |-------|------|-------------|---------|
 | SOLACE (SD3.5-M) | SD3.5-Medium | Self-confidence reward only | [`wookiekim/SD3.5M-SOLACE`](https://huggingface.co/wookiekim/SD3.5M-SOLACE) |
 | SOLACE (SD3.5-L) | SD3.5-Large | Self-confidence reward only | [`wookiekim/SD3.5L-SOLACE`](https://huggingface.co/wookiekim/SD3.5L-SOLACE) |
+| SOLACE (Flux.1-dev) | Flux.1-dev | Self-confidence reward only | [`wookiekim/FLUX.1-dev-SOLACE`](https://huggingface.co/wookiekim/FLUX.1-dev-SOLACE) |
+| SOLACE (Wan2.1) | Wan2.1-T2V-1.3B | Self-confidence reward only (text-to-video) | [`wookiekim/Wan2.1-T2V-1.3B-SOLACE`](https://huggingface.co/wookiekim/Wan2.1-T2V-1.3B-SOLACE) |
 | SOLACE on FlowGRPO-GenEval | SD3.5-Medium | Flow-GRPO post-trained on GenEval, then SOLACE | [`wookiekim/SD3.5M-SOLACE-on-FlowGRPO-GenEval`](https://huggingface.co/wookiekim/SD3.5M-SOLACE-on-FlowGRPO-GenEval) |
 | SOLACE on FlowGRPO-OCR | SD3.5-Medium | Flow-GRPO post-trained on OCR, then SOLACE | [`wookiekim/SD3.5M-SOLACE-on-FlowGRPO-OCR`](https://huggingface.co/wookiekim/SD3.5M-SOLACE-on-FlowGRPO-OCR) |
 | SOLACE on FlowGRPO-PickScore | SD3.5-Medium | Flow-GRPO post-trained on PickScore, then SOLACE | [`wookiekim/SD3.5M-SOLACE-on-FlowGRPO-PickScore`](https://huggingface.co/wookiekim/SD3.5M-SOLACE-on-FlowGRPO-PickScore) |
